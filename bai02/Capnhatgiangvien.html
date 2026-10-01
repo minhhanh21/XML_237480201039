@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật giảng viên</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 800px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        td:first-child {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>CẬP NHẬT GIẢNG VIÊN</h2>
+
+    <table>
+        <tr>
+            <th>STT</th>
+            <th>Họ tên giảng viên</th>
+            <th>Ngành</th>
+            <th>Đơn vị</th>
+        </tr>
+
+        <tbody id="danhsach"></tbody>
+    </table>
+
+    <script>
+
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.open("GET", "hosogiangvien.xml", true);
+
+        xhttp.onload = function() {
+
+            if (this.status == 200) {
+
+                var xmlDoc = this.responseXML;
+
+                var giangvien =
+                    xmlDoc.getElementsByTagName("giangvien");
+
+                // Duyệt danh sách giảng viên
+                for (var i = 0; i < giangvien.length; i++) {
+
+                    var hoten =
+                        giangvien[i]
+                        .getElementsByTagName("hoten")[0]
+                        .textContent;
+
+                    // Tìm Phạm Thanh Loan
+                    if (hoten == "Phạm Thanh Loan") {
+
+                        // Cập nhật đơn vị thành Cơ bản
+                        giangvien[i]
+                        .getElementsByTagName("donvi")[0]
+                        .textContent = "Cơ bản";
+                    }
+                }
+
+                // Hiển thị danh sách sau khi cập nhật
+                var kq = "";
+
+                for (var i = 0; i < giangvien.length; i++) {
+
+                    var hoten =
+                        giangvien[i]
+                        .getElementsByTagName("hoten")[0]
+                        .textContent;
+
+                    var nganh =
+                        giangvien[i]
+                        .getElementsByTagName("nganh")[0]
+                        .textContent;
+
+                    var donvi =
+                        giangvien[i]
+                        .getElementsByTagName("donvi")[0]
+                        .textContent;
+
+                    kq += "<tr>";
+
+                    kq += "<td>" + (i + 1) + "</td>";
+                    kq += "<td>" + hoten + "</td>";
+                    kq += "<td>" + nganh + "</td>";
+                    kq += "<td>" + donvi + "</td>";
+
+                    kq += "</tr>";
+                }
+
+                document.getElementById("danhsach").innerHTML = kq;
+            }
+        };
+
+        xhttp.send();
+
+    </script>
+
+</body>
+</html>

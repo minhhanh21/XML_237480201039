@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách môn học</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 800px;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+        }
+
+        th {
+            text-align: center;
+        }
+
+        td:first-child {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>DANH SÁCH MÔN HỌC</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên môn học</th>
+                <th>Nhà xuất bản</th>
+                <th>Tác giả</th>
+            </tr>
+        </thead>
+
+        <tbody id="dsmonhoc"></tbody>
+    </table>
+
+    <script>
+        // Tạo đối tượng XMLHttpRequest
+        var xhttp = new XMLHttpRequest();
+
+        // Mở file XML
+        xhttp.open("GET", "dsmonhoc.xml", true);
+
+        // Khi đọc file XML xong
+        xhttp.onload = function () {
+
+            if (this.status == 200) {
+
+                var xmlDoc = this.responseXML;
+
+                // Lấy tất cả thẻ subject
+                var subjects = xmlDoc.getElementsByTagName("subject");
+
+                var table = "";
+
+                // Duyệt từng môn học
+                for (var i = 0; i < subjects.length; i++) {
+
+                    var title = subjects[i]
+                        .getElementsByTagName("title")[0]
+                        .textContent;
+
+                    var publisher = subjects[i]
+                        .getElementsByTagName("publisher")[0]
+                        .textContent;
+
+                    var author = subjects[i]
+                        .getElementsByTagName("author")[0]
+                        .textContent;
+
+                    table += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${title}</td>
+                            <td>${publisher}</td>
+                            <td>${author}</td>
+                        </tr>
+                    `;
+                }
+
+                document.getElementById("dsmonhoc").innerHTML = table;
+            }
+        };
+
+        // Gửi yêu cầu
+        xhttp.send();
+    </script>
+
+</body>
+</html>
